@@ -376,6 +376,148 @@ header {
     align-self: flex-start;
 }
 
+/* New and updated styles for LLM-powered features */
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.input-container input,
+.input-container textarea {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.send-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #3367d6;
+}
+
+.send-button:disabled {
+    background-color: #a9c3f5;
+    cursor: not-allowed;
+}
+
+.chat-container {
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f1f3f4;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 10px 0;
+    padding: 8px 12px;
+    background-color: white;
+    border-radius: 18px;
+    width: fit-content;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: #aaa;
+    border-radius: 50%;
+    display: inline-block;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: scale(0.7);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.reflection-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 15px;
+}
+
+.reflection-card h4 {
+    margin-bottom: 8px;
+    color: var(--primary-color);
+}
+
+.generated-art {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.generated-art img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.art-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.loading-circle {
+    animation: spin 1.5s linear infinite;
+    transform-origin: center;
+}
+
+@keyframes spin {
+    0% {
+        stroke-dashoffset: 125.6;
+    }
+    100% {
+        stroke-dashoffset: -125.6;
+    }
+}
+
+.error-message {
+    color: var(--accent-color);
+    text-align: center;
+    padding: 10px;
+}
+
 /* Footer Styles */
 footer {
     margin-top: 60px;
@@ -399,4 +541,3 @@ footer {
         font-size: 2rem;
     }
 }
-

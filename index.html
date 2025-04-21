@@ -39,12 +39,12 @@
                 <div class="feature">
                     <h3>Calendar Management</h3>
                     <div class="demo calendar-demo">
-                        <div class="chat-message">
-                            <p class="user-message">I need to schedule a doctor's appointment next Tuesday at 10am and a team meeting on Friday at 2pm.</p>
-                            <p class="ai-message">I've added these events to your calendar:<br>
-                            ✓ Doctor's appointment: Tuesday, 10:00 AM<br>
-                            ✓ Team meeting: Friday, 2:00 PM<br>
-                            Would you like me to set reminders for these events?</p>
+                        <div class="chat-container" id="personal-assistant-chat">
+                            <p class="ai-message">Hi there! I can help manage your calendar, set reminders, and more. What would you like assistance with today?</p>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="personal-assistant-input" placeholder="Try: 'Schedule a doctor's appointment next Tuesday at 10am'">
+                            <button id="personal-assistant-send" class="send-button">Send</button>
                         </div>
                         <div class="calendar-visual"></div>
                     </div>
@@ -72,11 +72,12 @@
                 <div class="feature">
                     <h3>Personalized Tutoring</h3>
                     <div class="demo tutor-demo">
-                        <div class="chat-message">
-                            <p class="user-message">I don't understand how to solve quadratic equations.</p>
-                            <p class="ai-message">Let's break it down: A quadratic equation has the form ax² + bx + c = 0.<br><br>
-                            To solve it, you can use the quadratic formula: x = (-b ± √(b² - 4ac)) / 2a<br><br>
-                            Would you like to try an example together?</p>
+                        <div class="chat-container" id="tutor-responses">
+                            <p class="ai-message">I'm your AI tutor. Ask me anything about math, science, history, literature, or any other subject you're studying!</p>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="tutor-question" placeholder="Try: 'Can you explain how photosynthesis works?'">
+                            <button id="tutor-ask" class="send-button">Ask</button>
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,9 @@
                         <div class="journal-prompt">
                             <h4>Today's Journal Prompt:</h4>
                             <p>What are three things that brought you joy today, no matter how small?</p>
-                            <textarea placeholder="Start writing here..."></textarea>
+                            <textarea id="journal-entry" placeholder="Start writing here..."></textarea>
+                            <button id="journal-submit" class="send-button">Get Reflection</button>
+                            <div id="journal-feedback"></div>
                         </div>
                     </div>
                 </div>
@@ -250,6 +253,7 @@
                             <p class="story-prompt">Once upon a time in a digital forest...</p>
                             <p class="story-continuation">...lived a curious algorithm named Ada who could see patterns that others missed. Every day, Ada would explore new datasets, learning and growing. But she yearned for something more—a purpose beyond mere pattern recognition.</p>
                             <textarea placeholder="Continue the story..."></textarea>
+                            <button id="story-continue-btn" class="send-button">Continue Story</button>
                         </div>
                     </div>
                 </div>
@@ -258,12 +262,13 @@
                     <div class="demo art-demo">
                         <div class="art-prompt">
                             <input type="text" placeholder="Describe an image to generate..." value="A futuristic city with flying cars and tall glass buildings">
+                            <button id="generate-art-btn" class="send-button">Generate Art</button>
                             <div class="art-placeholder">
                                 <svg viewBox="0 0 200 150" width="200" height="150">
                                     <rect width="200" height="150" fill="#e0e0e0"/>
                                     <line x1="0" y1="0" x2="200" y2="150" stroke="#b0b0b0" stroke-width="2"/>
                                     <line x1="200" y1="0" x2="0" y2="150" stroke="#b0b0b0" stroke-width="2"/>
-                                    <text x="100" y="75" text-anchor="middle" fill="#707070">AI-Generated Art</text>
+                                    <text x="100" y="75" text-anchor="middle" fill="#707070">Click Generate to create art</text>
                                 </svg>
                             </div>
                         </div>
@@ -279,11 +284,10 @@
 
     <footer>
         <p>This interactive showcase demonstrates various AI assistant capabilities that can enhance human productivity, creativity, and well-being.</p>
-        <p>© 2023 AI Assistant Capabilities Showcase</p>
+        <p> 2023 AI Assistant Capabilities Showcase</p>
     </footer>
 
     <script type="module" src="script.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
-

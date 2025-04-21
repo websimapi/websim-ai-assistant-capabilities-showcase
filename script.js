@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCalendarVisual();
 });
 
+// Conversation history for various LLM-powered features
+const conversationHistories = {
+    personalAssistant: [],
+    tutor: [],
+    mentalHealth: [],
+    storyCollaboration: []
+};
+
 function initializeAnimations() {
     // Initial animations for page load
     gsap.from('header', { 
@@ -52,11 +60,273 @@ function setupCardInteractions() {
 }
 
 function setupDemoInteractions() {
+    setupPersonalAssistantDemo();
+    setupTutorDemo();
+    setupMentalHealthDemo();
     setupSpeechDemo();
     setupQuizDemo();
     setupTranslationDemo();
-    setupArtDemo();
-    setupStoryDemo();
+    setupArtGenerationDemo();
+    setupStoryCollaborationDemo();
+}
+
+async function setupPersonalAssistantDemo() {
+    const userInput = document.querySelector('#personal-assistant-input');
+    const sendButton = document.querySelector('#personal-assistant-send');
+    const chatContainer = document.querySelector('#personal-assistant-chat');
+    
+    if (userInput && sendButton && chatContainer) {
+        sendButton.addEventListener('click', async () => {
+            const userMessage = userInput.value.trim();
+            if (!userMessage) return;
+            
+            // Add user message to UI
+            addMessageToChat(chatContainer, userMessage, 'user');
+            userInput.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+            chatContainer.appendChild(typingIndicator);
+            
+            // Update conversation history
+            const newMessage = {
+                role: "user",
+                content: userMessage
+            };
+            conversationHistories.personalAssistant.push(newMessage);
+            
+            // Limit history to last 10 messages
+            conversationHistories.personalAssistant = 
+                conversationHistories.personalAssistant.slice(-10);
+            
+            try {
+                // Get response from LLM
+                const completion = await websim.chat.completions.create({
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a helpful AI personal assistant. You help with scheduling, reminders, and planning. Be concise and practical. If the user asks about scheduling or planning something, always acknowledge it and confirm you've noted it."
+                        },
+                        ...conversationHistories.personalAssistant
+                    ]
+                });
+                
+                // Remove typing indicator
+                chatContainer.removeChild(typingIndicator);
+                
+                // Add AI response to UI
+                addMessageToChat(chatContainer, completion.content, 'ai');
+                
+                // Update conversation history with AI response
+                conversationHistories.personalAssistant.push(completion);
+                
+                // If message mentions scheduling, update calendar visual
+                if (userMessage.toLowerCase().includes('schedule') || 
+                    userMessage.toLowerCase().includes('appointment') || 
+                    userMessage.toLowerCase().includes('meeting')) {
+                    updateCalendarWithNewEvent(userMessage);
+                }
+            } catch (error) {
+                console.error('Error getting LLM response:', error);
+                chatContainer.removeChild(typingIndicator);
+                addMessageToChat(chatContainer, "Sorry, I encountered an error processing your request.", 'ai');
+            }
+        });
+        
+        // Allow pressing Enter to send message
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    }
+}
+
+function addMessageToChat(container, message, sender) {
+    const messageElement = document.createElement('p');
+    messageElement.className = sender === 'user' ? 'user-message' : 'ai-message';
+    messageElement.textContent = message;
+    
+    // Animate message appearance
+    messageElement.style.opacity = '0';
+    messageElement.style.transform = 'translateY(10px)';
+    container.appendChild(messageElement);
+    
+    setTimeout(() => {
+        messageElement.style.opacity = '1';
+        messageElement.style.transform = 'translateY(0)';
+    }, 10);
+    
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+}
+
+function updateCalendarWithNewEvent(message) {
+    // Simple event extraction based on common patterns
+    const datePattern = /(monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today)/i;
+    const timePattern = /(\d{1,2}(:\d{2})?\s*(am|pm)?)/i;
+    
+    const dateMatch = message.match(datePattern);
+    const timeMatch = message.match(timePattern);
+    
+    if (dateMatch && timeMatch) {
+        const calendarDays = document.querySelectorAll('.calendar-day');
+        let targetDay;
+        
+        switch (dateMatch[0].toLowerCase()) {
+            case 'monday': targetDay = 2; break;
+            case 'tuesday': targetDay = 3; break;
+            case 'wednesday': targetDay = 4; break;
+            case 'thursday': targetDay = 5; break;
+            case 'friday': targetDay = 6; break;
+            case 'saturday': targetDay = 7; break;
+            case 'sunday': targetDay = 1; break;
+            case 'tomorrow': targetDay = new Date().getDay() + 1; break;
+            case 'today': targetDay = new Date().getDay(); break;
+        }
+        
+        calendarDays.forEach(day => {
+            const dayNum = parseInt(day.getAttribute('data-day'), 10);
+            if (dayNum % 7 === targetDay % 7) {
+                // Create event
+                day.classList.add('has-event');
+                
+                // Extract potential event type (meeting, appointment, etc.)
+                const eventTypes = ['meeting', 'appointment', 'call', 'reminder', 'event'];
+                let eventType = 'Event';
+                for (const type of eventTypes) {
+                    if (message.toLowerCase().includes(type)) {
+                        eventType = type.charAt(0).toUpperCase() + type.slice(1);
+                        break;
+                    }
+                }
+                
+                // Add or update event indicator
+                let indicator = day.querySelector('.event-indicator');
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    indicator.className = 'event-indicator';
+                    day.appendChild(indicator);
+                }
+                
+                indicator.textContent = `${eventType} ${timeMatch[0]}`;
+            }
+        });
+    }
+}
+
+async function setupTutorDemo() {
+    const userQuestion = document.querySelector('#tutor-question');
+    const askButton = document.querySelector('#tutor-ask');
+    const responsesContainer = document.querySelector('#tutor-responses');
+    
+    if (userQuestion && askButton && responsesContainer) {
+        askButton.addEventListener('click', async () => {
+            const question = userQuestion.value.trim();
+            if (!question) return;
+            
+            // Add user question to UI
+            addMessageToChat(responsesContainer, question, 'user');
+            userQuestion.value = '';
+            
+            // Show loading state
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'typing-indicator';
+            loadingElement.innerHTML = '<span></span><span></span><span></span>';
+            responsesContainer.appendChild(loadingElement);
+            
+            // Update conversation history
+            conversationHistories.tutor.push({
+                role: "user",
+                content: question
+            });
+            
+            try {
+                // Get response from LLM
+                const completion = await websim.chat.completions.create({
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a patient, knowledgeable tutor. Explain concepts clearly and at an appropriate level. Include examples where helpful. Be encouraging. If asked about math, science, language, or academic topics, provide a thorough but accessible explanation."
+                        },
+                        ...conversationHistories.tutor
+                    ]
+                });
+                
+                // Remove loading indicator
+                responsesContainer.removeChild(loadingElement);
+                
+                // Add AI response to UI
+                addMessageToChat(responsesContainer, completion.content, 'ai');
+                
+                // Update conversation history
+                conversationHistories.tutor.push(completion);
+            } catch (error) {
+                console.error('Error getting LLM response:', error);
+                responsesContainer.removeChild(loadingElement);
+                addMessageToChat(responsesContainer, "Sorry, I couldn't generate a response right now.", 'ai');
+            }
+        });
+        
+        // Allow pressing Enter to send question
+        userQuestion.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                askButton.click();
+            }
+        });
+    }
+}
+
+async function setupMentalHealthDemo() {
+    const journalEntry = document.querySelector('#journal-entry');
+    const submitButton = document.querySelector('#journal-submit');
+    const feedbackContainer = document.querySelector('#journal-feedback');
+    
+    if (journalEntry && submitButton && feedbackContainer) {
+        submitButton.addEventListener('click', async () => {
+            const entry = journalEntry.value.trim();
+            if (!entry) return;
+            
+            // Show loading indicator
+            feedbackContainer.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            
+            try {
+                // Get reflective feedback from LLM
+                const completion = await websim.chat.completions.create({
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a supportive, thoughtful mental health assistant. Provide reflective, empathetic responses to journal entries. Never diagnose. Focus on validation, gentle insights, and positive reinforcement. Keep responses brief (2-3 sentences)."
+                        },
+                        {
+                            role: "user",
+                            content: entry
+                        }
+                    ]
+                });
+                
+                // Display the reflection
+                feedbackContainer.innerHTML = `
+                    <div class="reflection-card">
+                        <h4>Reflection</h4>
+                        <p>${completion.content}</p>
+                    </div>
+                `;
+                
+                // Animate feedback appearance
+                gsap.from(feedbackContainer.querySelector('.reflection-card'), {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.5
+                });
+            } catch (error) {
+                console.error('Error getting LLM response:', error);
+                feedbackContainer.innerHTML = '<p class="error-message">Unable to generate reflection right now.</p>';
+            }
+        });
+    }
 }
 
 function setupSpeechDemo() {
@@ -161,81 +431,129 @@ function setupTranslationDemo() {
     }
 }
 
-function setupArtDemo() {
+async function setupArtGenerationDemo() {
     const artPromptInput = document.querySelector('.art-prompt input');
     const artPlaceholder = document.querySelector('.art-placeholder');
+    const generateButton = document.querySelector('#generate-art-btn');
     
-    if (artPromptInput && artPlaceholder) {
-        artPromptInput.addEventListener('input', debounce(() => {
-            // Simulate art generation
-            gsap.to(artPlaceholder, { 
-                opacity: 0, 
-                duration: 0.3,
-                onComplete: () => {
-                    // Change the placeholder color based on the prompt
-                    const prompt = artPromptInput.value.toLowerCase();
-                    let gradientColors = ['#e0e0e0', '#b0b0b0'];
-                    
-                    if (prompt.includes('city') || prompt.includes('urban')) {
-                        gradientColors = ['#3f87a6', '#ebf8e1'];
-                    } else if (prompt.includes('nature') || prompt.includes('forest')) {
-                        gradientColors = ['#588157', '#a3b18a'];
-                    } else if (prompt.includes('sunset') || prompt.includes('sky')) {
-                        gradientColors = ['#f94144', '#f9c74f'];
-                    } else if (prompt.includes('ocean') || prompt.includes('sea')) {
-                        gradientColors = ['#023e8a', '#90e0ef'];
-                    }
-                    
-                    // Update the SVG with a new gradient background
-                    artPlaceholder.innerHTML = `
-                        <svg viewBox="0 0 200 150" width="200" height="150">
-                            <defs>
-                                <linearGradient id="artGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:${gradientColors[0]};stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:${gradientColors[1]};stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <rect width="200" height="150" fill="url(#artGradient)"/>
-                            <text x="100" y="75" text-anchor="middle" fill="#ffffff">AI-Generated Art</text>
-                        </svg>
-                    `;
-                    
-                    gsap.to(artPlaceholder, { opacity: 1, duration: 0.3 });
-                }
-            });
-        }, 500));
+    if (artPromptInput && artPlaceholder && generateButton) {
+        generateButton.addEventListener('click', async () => {
+            const prompt = artPromptInput.value.trim();
+            if (!prompt) return;
+            
+            // Show loading indicator
+            artPlaceholder.innerHTML = `
+                <div class="art-loading">
+                    <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20" fill="none" stroke="#cccccc" stroke-width="4"></circle>
+                        <circle cx="25" cy="25" r="20" fill="none" stroke="#4285f4" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="50" class="loading-circle"></circle>
+                    </svg>
+                    <p>Generating art...</p>
+                </div>
+            `;
+            
+            try {
+                // Generate image using the imageGen API
+                const result = await websim.imageGen({
+                    prompt: prompt,
+                    aspect_ratio: "1:1"
+                });
+                
+                // Display the generated image
+                artPlaceholder.innerHTML = `
+                    <div class="generated-art">
+                        <img src="${result.url}" alt="AI generated art based on: ${prompt}">
+                    </div>
+                `;
+                
+                // Animate image appearance
+                gsap.from(artPlaceholder.querySelector('img'), {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 0.5
+                });
+            } catch (error) {
+                console.error('Error generating image:', error);
+                artPlaceholder.innerHTML = `
+                    <div class="error-message">
+                        <p>Error generating image. Please try again.</p>
+                    </div>
+                `;
+            }
+        });
     }
 }
 
-function setupStoryDemo() {
+async function setupStoryCollaborationDemo() {
     const storyTextarea = document.querySelector('.story-starter textarea');
-    const storyPrompt = document.querySelector('.story-prompt');
+    const storyContinueBtn = document.querySelector('#story-continue-btn');
     const storyContinuation = document.querySelector('.story-continuation');
+    const storyPrompt = document.querySelector('.story-prompt');
     
-    if (storyTextarea && storyPrompt && storyContinuation) {
-        storyTextarea.addEventListener('input', debounce(() => {
-            const userContinuation = storyTextarea.value.trim();
-            
-            if (userContinuation.length > 0) {
-                // Simulate AI continuing the story based on user input
-                setTimeout(() => {
-                    const aiResponse = "One day, Ada discovered an unusual pattern in the data—a rhythmic pulse that seemed almost... alive. It was unlike anything she had encountered before. Could this be the purpose she was seeking? She followed the digital breadcrumbs deeper into the forest, unaware that this journey would forever change not just her existence, but the very nature of consciousness itself.";
-                    
-                    // Animate the new continuation
-                    gsap.to(storyContinuation, { 
-                        opacity: 0, 
-                        duration: 0.3,
-                        onComplete: () => {
-                            storyContinuation.textContent = aiResponse;
-                            gsap.to(storyContinuation, { 
-                                opacity: 1, 
-                                duration: 0.5 
-                            });
-                        }
-                    });
-                }, 1500);
+    if (storyTextarea && storyContinueBtn && storyContinuation && storyPrompt) {
+        // Setup initial context
+        conversationHistories.storyCollaboration = [
+            {
+                role: "system",
+                content: "You are a creative writing assistant specializing in collaborative storytelling. Continue the story in an engaging, descriptive way that builds on both the original prompt and the user's contributions. Keep your continuations to 2-3 sentences."
+            },
+            {
+                role: "user",
+                content: "Story beginning: " + storyPrompt.textContent
+            },
+            {
+                role: "assistant",
+                content: storyContinuation.textContent
             }
-        }, 1000));
+        ];
+        
+        storyContinueBtn.addEventListener('click', async () => {
+            const userContinuation = storyTextarea.value.trim();
+            if (!userContinuation) return;
+            
+            // Update UI to show loading
+            storyContinueBtn.disabled = true;
+            storyContinueBtn.textContent = "Thinking...";
+            
+            // Add user contribution to conversation history
+            conversationHistories.storyCollaboration.push({
+                role: "user",
+                content: userContinuation
+            });
+            
+            try {
+                // Get AI continuation from LLM
+                const completion = await websim.chat.completions.create({
+                    messages: conversationHistories.storyCollaboration
+                });
+                
+                // Update UI with new continuation
+                gsap.to(storyContinuation, { 
+                    opacity: 0, 
+                    duration: 0.3,
+                    onComplete: () => {
+                        storyContinuation.textContent = completion.content;
+                        storyTextarea.value = "";
+                        gsap.to(storyContinuation, { 
+                            opacity: 1, 
+                            duration: 0.5 
+                        });
+                    }
+                });
+                
+                // Add AI response to conversation history
+                conversationHistories.storyCollaboration.push(completion);
+                
+                // Reset button state
+                storyContinueBtn.disabled = false;
+                storyContinueBtn.textContent = "Continue Story";
+            } catch (error) {
+                console.error('Error getting story continuation:', error);
+                storyContinuation.textContent = "I'm having trouble continuing the story right now. Please try again later.";
+                storyContinueBtn.disabled = false;
+                storyContinueBtn.textContent = "Continue Story";
+            }
+        });
     }
 }
 

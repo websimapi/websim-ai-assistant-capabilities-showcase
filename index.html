@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Capabilities Showcase</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.2/index.js"
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 40 40">
+                <circle cx="20" cy="20" r="18" fill="#4A86E8" opacity="0.8"/>
+                <circle cx="20" cy="20" r="12" fill="#2A56B8" opacity="0.8"/>
+                <circle cx="20" cy="20" r="6" fill="#FFFFFF"/>
+            </svg>
+            <h1>AI Assistant Capabilities</h1>
+        </div>
+        <p class="subtitle">Explore the many ways AI can assist in daily life</p>
+    </header>
+
+    <main class="showcase-grid">
+        <!-- Personal Assistant Card -->
+        <section class="card" id="personal-assistant">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5M7.5,10.5A1.5,1.5 0 0,1 9,12A1.5,1.5 0 0,1 7.5,13.5A1.5,1.5 0 0,1 6,12A1.5,1.5 0 0,1 7.5,10.5M16.5,10.5A1.5,1.5 0 0,1 18,12A1.5,1.5 0 0,1 16.5,13.5A1.5,1.5 0 0,1 15,12A1.5,1.5 0 0,1 16.5,10.5Z"></path>
+                </svg>
+                <h2>Personal Assistant Tasks</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Calendar Management</h3>
+                    <div class="demo calendar-demo">
+                        <div class="chat-message">
+                            <p class="user-message">I need to schedule a doctor's appointment next Tuesday at 10am and a team meeting on Friday at 2pm.</p>
+                            <p class="ai-message">I've added these events to your calendar:<br>
+                            ✓ Doctor's appointment: Tuesday, 10:00 AM<br>
+                            ✓ Team meeting: Friday, 2:00 PM<br>
+                            Would you like me to set reminders for these events?</p>
+                        </div>
+                        <div class="calendar-visual"></div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Email Management</h3>
+                    <p>Automatically categorize, summarize, and draft responses to emails based on your communication style.</p>
+                </div>
+                <div class="feature">
+                    <h3>Travel Planning</h3>
+                    <p>Find and compare flights, hotels, and activities based on your preferences, budget, and schedule.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning and Education Card -->
+        <section class="card" id="education">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"></path>
+                </svg>
+                <h2>Learning and Education</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Personalized Tutoring</h3>
+                    <div class="demo tutor-demo">
+                        <div class="chat-message">
+                            <p class="user-message">I don't understand how to solve quadratic equations.</p>
+                            <p class="ai-message">Let's break it down: A quadratic equation has the form ax² + bx + c = 0.<br><br>
+                            To solve it, you can use the quadratic formula: x = (-b ± √(b² - 4ac)) / 2a<br><br>
+                            Would you like to try an example together?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Essay Feedback</h3>
+                    <p>Receive detailed feedback on writing style, structure, grammar, and content with suggestions for improvement.</p>
+                </div>
+                <div class="feature">
+                    <h3>Quiz Generation</h3>
+                    <div class="demo quiz-demo">
+                        <div class="quiz-question">
+                            <p>What is the capital of France?</p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="q1"> London</label>
+                                <label><input type="radio" name="q1"> Berlin</label>
+                                <label><input type="radio" name="q1"> Paris</label>
+                                <label><input type="radio" name="q1"> Rome</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health and Wellness Card -->
+        <section class="card" id="health">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M10.5,13H8V15H10.5V18H12.5V15H15V13H12.5V10H10.5V13M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z"></path>
+                </svg>
+                <h2>Health and Wellness</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Symptom Tracking</h3>
+                    <p>Log and monitor symptoms over time, receive medication reminders, and get basic health guidance.</p>
+                </div>
+                <div class="feature">
+                    <h3>Mental Health Support</h3>
+                    <div class="demo mental-health-demo">
+                        <div class="journal-prompt">
+                            <h4>Today's Journal Prompt:</h4>
+                            <p>What are three things that brought you joy today, no matter how small?</p>
+                            <textarea placeholder="Start writing here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Fitness Planning</h3>
+                    <div class="demo fitness-demo">
+                        <div class="workout-plan">
+                            <h4>Personalized Workout Plan</h4>
+                            <ul class="workout-list">
+                                <li>Warm-up: 5 min light cardio</li>
+                                <li>Squats: 3 sets of 12 reps</li>
+                                <li>Push-ups: 3 sets of 10 reps</li>
+                                <li>Planks: 3 sets of 30 seconds</li>
+                                <li>Cool down: 5 min stretching</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessibility Card -->
+        <section class="card" id="accessibility">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,1C7.59,1 4,4.59 4,9C4,14.55 11.04,22.74 11.4,23.1C11.68,23.38 12.32,23.38 12.6,23.1C12.96,22.74 20,14.55 20,9C20,4.59 16.41,1 12,1M12,20.25C9.64,17.11 6,11.88 6,9C6,5.69 8.69,3 12,3C15.31,3 18,5.69 18,9C18,11.88 14.36,17.11 12,20.25M12,7A2,2 0 0,0 10,9A2,2 0 0,0 12,11A2,2 0 0,0 14,9A2,2 0 0,0 12,7Z"></path>
+                </svg>
+                <h2>Accessibility</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Speech-to-Text & Text-to-Speech</h3>
+                    <div class="demo speech-demo">
+                        <button class="demo-button speech-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"></path>
+                            </svg>
+                            Record Speech
+                        </button>
+                        <div class="speech-text">Your spoken words will appear here...</div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Image Description</h3>
+                    <p>Generate detailed descriptions of images, charts, and surroundings for visually impaired users.</p>
+                </div>
+                <div class="feature">
+                    <h3>Real-time Translation</h3>
+                    <div class="demo translation-demo">
+                        <div class="translation-container">
+                            <div class="translation-input">
+                                <textarea placeholder="Type text to translate...">Hello, how are you today?</textarea>
+                                <select class="language-select">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                            </div>
+                            <div class="translation-output">
+                                <p>¡Hola! ¿Cómo estás hoy?</p>
+                                <select class="language-select">
+                                    <option value="en">English</option>
+                                    <option value="es" selected>Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crisis Response Card -->
+        <section class="card" id="crisis">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"></path>
+                </svg>
+                <h2>Crisis & Emergency Response</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Content Monitoring</h3>
+                    <p>Identify and flag potentially harmful content or situations where someone may be in distress.</p>
+                </div>
+                <div class="feature">
+                    <h3>Resource Connection</h3>
+                    <div class="demo resource-demo">
+                        <div class="resource-list">
+                            <h4>Available Resources:</h4>
+                            <div class="resource-item">
+                                <h5>Crisis Text Line</h5>
+                                <p>Text HOME to 741741</p>
+                            </div>
+                            <div class="resource-item">
+                                <h5>National Suicide Prevention Lifeline</h5>
+                                <p>1-800-273-8255</p>
+                            </div>
+                            <div class="resource-item">
+                                <h5>Local Emergency Services</h5>
+                                <p>911</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creative Help Card -->
+        <section class="card" id="creative">
+            <div class="card-header">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"></path>
+                </svg>
+                <h2>Creative Help</h2>
+            </div>
+            <div class="card-content">
+                <div class="feature">
+                    <h3>Co-writing & Content Creation</h3>
+                    <div class="demo writing-demo">
+                        <div class="story-starter">
+                            <h4>Story Collaboration</h4>
+                            <p class="story-prompt">Once upon a time in a digital forest...</p>
+                            <p class="story-continuation">...lived a curious algorithm named Ada who could see patterns that others missed. Every day, Ada would explore new datasets, learning and growing. But she yearned for something more—a purpose beyond mere pattern recognition.</p>
+                            <textarea placeholder="Continue the story..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Art Generation</h3>
+                    <div class="demo art-demo">
+                        <div class="art-prompt">
+                            <input type="text" placeholder="Describe an image to generate..." value="A futuristic city with flying cars and tall glass buildings">
+                            <div class="art-placeholder">
+                                <svg viewBox="0 0 200 150" width="200" height="150">
+                                    <rect width="200" height="150" fill="#e0e0e0"/>
+                                    <line x1="0" y1="0" x2="200" y2="150" stroke="#b0b0b0" stroke-width="2"/>
+                                    <line x1="200" y1="0" x2="0" y2="150" stroke="#b0b0b0" stroke-width="2"/>
+                                    <text x="100" y="75" text-anchor="middle" fill="#707070">AI-Generated Art</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature">
+                    <h3>Personalized Gift Ideas</h3>
+                    <p>Generate custom poems, messages, and design concepts tailored to the recipient's interests and personality.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>This interactive showcase demonstrates various AI assistant capabilities that can enhance human productivity, creativity, and well-being.</p>
+        <p>© 2023 AI Assistant Capabilities Showcase</p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
+

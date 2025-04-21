@@ -115,10 +115,10 @@ function setupQuizDemo() {
                 
                 if (correctAnswer) {
                     e.target.parentElement.style.fontWeight = 'bold';
-                    e.target.parentElement.style.color = var(--secondary-color, 'green');
+                    e.target.parentElement.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim() || 'green';
                 } else {
                     e.target.parentElement.style.fontWeight = 'bold';
-                    e.target.parentElement.style.color = var(--accent-color, 'red');
+                    e.target.parentElement.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || 'red';
                 }
             }
         });
@@ -347,4 +347,3 @@ function debounce(func, wait) {
         }, wait);
     };
 }
-
